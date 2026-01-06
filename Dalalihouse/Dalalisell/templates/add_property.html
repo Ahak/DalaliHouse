@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content%}
+     {%  include "slidebar.html" %}
+    <div class="main_content" style="margin-left: 300px; padding: 20px">
+      <div class="container mt-5">
+        <h2 class="mb-4">Add New Property</h2>
+        <form method="POST" action="{% url 'add-property' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="title" class="form-label">Property Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter property title"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="Enter property description"
+              required
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input
+              type="number"
+              class="form-control"
+              id="price"
+              name="price"
+              placeholder="Enter property price"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Add Property</button>
+        </form>
+      </div>
+    </div>
+{%endblock%}

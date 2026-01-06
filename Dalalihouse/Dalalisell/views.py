@@ -1,0 +1,101 @@
+import pkgutil
+from django.shortcuts import render,redirect
+from django.views import View
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import *
+
+User = get_user_model()
+# Create your views here.
+class LoginView(View):
+    def get(self,request):
+        return render(request, 'index.html')
+    
+    def post(self, request):
+        username = request.POST['username']
+        password =request.POST['password']
+        user = authenticate(username=username, password= password)
+
+        if user is not None:
+            login(request, user)
+            if user.is_superuser or user.role == 'admin':
+                return redirect('admin/')
+            elif user.role == 'seller':
+                return redirect('seller-dashboard')
+            elif user.role == 'buyer':
+                return redirect('buyer-dashboard')
+
+        else:
+            messages.error(request, 'invalid username or password')  
+            return render(request, 'index.html')
+        
+class SignupView(View):
+    def get(self, request):
+        return render(request, 'signup.html')
+    
+    def post(self, request):
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        role = request.POST['role']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        image = request.FILES.get('image')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+            return render(request, 'signup.html')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists')
+            return render(request, 'signup.html')
+
+        user = User.objects.create_user(username=username, email=email, phone=phone, role=role, password=password, image=image, first_name=first_name, last_name=last_name)
+        user.save()
+        messages.success(request, 'User registered successfully. Please login.')
+        return redirect('login')
+    
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
+    
+
+class BuyerDashboardView(LoginRequiredMixin, View):
+    def get(self, request):
+        properties = Property.objects.filter(status = "Approved")
+        return render(request, 'dashboard.html', {'properties': properties })
+    
+class PropertyView(LoginRequiredMixin, View):
+    def get(self, request, pk=None, *args, **kwargs):
+        if pk is None:
+            pk = kwargs.get('pk')
+        propert = Property.objects.get(id=pk)
+        return render(request, 'property.html', {'propert': propert })
+    
+class SellerDashboardView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'seller_dash.html')
+    
+    
+class AddPropertyView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'add_property.html')
+    def post(self, request):
+        User = get_user_model()
+        title = request.POST['title']
+        description = request.POST['description']
+        price = request.POST['price']
+        location = request.POST['location']
+        room = request.POST['room']
+        bathroom = request.POST['bathroom']
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+        image4 = request.FILES.get('image4')
+        user = request.user
+        return redirect('seller-dashboard')
