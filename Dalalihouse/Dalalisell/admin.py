@@ -13,5 +13,5 @@ class PropertyAdmin(admin.ModelAdmin):
         self.message_user(request, f'{updated} properties approved successfully.')
 
 admin.site.register(CustomUser)
-
+admin.site.register(Payment)
 

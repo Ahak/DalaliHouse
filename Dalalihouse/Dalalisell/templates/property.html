@@ -120,7 +120,7 @@
       <li class="list-group-item">
         <strong>Contact:</strong> {{propert.seller.phone}}
     </ul>
-    <a class="btn btn-primary mt-3" href="{% url 'payment' %}" >Buy Now</a>
+    <a class="btn btn-primary mt-3" href="{% url 'payment' pk=propert.id %}" >Buy Now</a>
   </div>
   {% endblock %}
 </div>

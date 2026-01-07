@@ -40,4 +40,11 @@ class Property(models.Model):
     def __str__(self):
         return f'{self.title} - {self.seller.username}'
     
+class Payment(models.Model):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role':'buyer'})
+    amount = models.DecimalField(decimal_places=2, max_digits=100)
+    date = models.DateTimeField(default=datetime.datetime.today)
 
+    def __str__(self):
+        return f'Payment of {self.amount} by {self.buyer.username} for {self.property.title}'

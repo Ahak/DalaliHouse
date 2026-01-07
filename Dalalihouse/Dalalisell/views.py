@@ -101,5 +101,29 @@ class AddPropertyView(LoginRequiredMixin, View):
         return redirect('seller-dashboard')
     
 class PaymentView(LoginRequiredMixin,View):
-    def get(self, request):
-        return render(request, "payment.html")
+    def get(self, request, pk=None, **kwargs):
+        if pk is None:
+            pk = kwargs.get('pk')
+        property = Property.objects.get(id=pk)
+        return render(request, "payment.html", {'property': property})
+    
+    def post(self, request,pk=None,**kwargs):
+        property_id = request.POST['property_id']
+        amount = request.POST['amount']
+        if pk is None:
+            pk = kwargs.get('pk')
+        property = Property.objects.get(id=property_id)
+        buyer = request.user
+
+        payment = Payment.objects.create(
+            property=property,
+            buyer=buyer,
+            amount=amount
+        )
+        payment.save()
+
+        property.status = 'Sold'
+        property.save()
+
+        messages.success(request, 'Payment successful and property marked as sold.')
+        return redirect('buyer-dashboard')

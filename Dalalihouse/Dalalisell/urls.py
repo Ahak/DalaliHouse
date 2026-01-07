@@ -11,5 +11,5 @@ urlpatterns = [
     path('seller-dashboard/', views.SellerDashboardView.as_view(), name='seller-dashboard'),
     path('add-property/', views.AddPropertyView.as_view(), name='add-property'),
     path('property/<int:pk>', views.PropertyView.as_view(), name='property'),
-    path('payment/', views.PaymentView.as_view(), name='payment'),
+    path('payment/<int:pk>', views.PaymentView.as_view(), name='payment'),
 ] 
