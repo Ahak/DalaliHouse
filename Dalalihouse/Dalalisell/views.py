@@ -71,7 +71,7 @@ class BuyerDashboardView(LoginRequiredMixin, View):
         return render(request, 'dashboard.html', {'properties': properties })
     
 class PropertyView(LoginRequiredMixin, View):
-    def get(self, request, pk=None, *args, **kwargs):
+    def get(self, request, pk=None, **kwargs):
         if pk is None:
             pk = kwargs.get('pk')
         propert = Property.objects.get(id=pk)
@@ -99,3 +99,7 @@ class AddPropertyView(LoginRequiredMixin, View):
         image4 = request.FILES.get('image4')
         user = request.user
         return redirect('seller-dashboard')
+    
+class PaymentView(LoginRequiredMixin,View):
+    def get(self, request):
+        return render(request, "payment.html")
