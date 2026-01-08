@@ -1,46 +1,205 @@
-{% extends "base.html" %}
-{% block content%}
-     {%  include "slidebar.html" %}
-    <div class="main_content" style="margin-left: 300px; padding: 20px">
-      <div class="container mt-5">
-        <h2 class="mb-4">Add New Property</h2>
-        <form method="POST" action="{% url 'add-property' %}">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="title" class="form-label">Property Title</label>
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              name="title"
-              placeholder="Enter property title"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-              class="form-control"
-              id="description"
-              name="description"
-              rows="4"
-              placeholder="Enter property description"
-              required
-            ></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input
-              type="number"
-              class="form-control"
-              id="price"
-              name="price"
-              placeholder="Enter property price"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">Add Property</button>
-        </form>
+{% extends "base.html" %} {% block content %} {% include "slidebar.html" %} {%if messages %} {% for message in messages %}
+<div
+  class="alert alert-{{ message.tags }} alert-dismissible fade show"
+  role="alert"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %}
+<div class="main_content" style="margin-left: 300px; padding: 20px">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+  >
+    Add Property
+  </button>
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add property</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            method="POST"
+            action="{% url 'add-property' %}"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                name="price"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="room" class="form-label">Number of room</label>
+              <input
+                type="number"
+                class="form-control"
+                id="room"
+                name="room"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="bathroom" class="form-label"
+                >Number of bathroom</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="bathroom"
+                name="bathroom"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input
+                type="text"
+                class="form-control"
+                id="location"
+                name="location"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="image1" class="form-label">Upload image 1</label>
+              <input
+                type="file"
+                class="form-control"
+                id="image1"
+                name="image1"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="image2" class="form-label">Upload image 2</label>
+              <input
+                type="file"
+                class="form-control"
+                id="image2"
+                name="image2"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="image3" class="form-label">Upload image 3</label>
+              <input
+                type="file"
+                class="form-control"
+                id="image3"
+                name="image3"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="image4" class="form-label">Upload image 4</label>
+              <input
+                type="file"
+                class="form-control"
+                id="image4"
+                name="image4"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
+  </div>
+
+  <h3>My Properties</h3>
+   <a href="{% url 'viewproperty' %}" class="btn btn-primary">Refresh</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">image</th>
+        <th scope="col">Title</th>
+        <th scope="col">Price</th>
+        <th scope="col">Location</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for property in property %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <th>
+          <img
+            src="{{ property.image1.url }}"
+            alt="{{ property.title }}"
+            width="100"
+            height="75"
+          />
+        <td>{{ property.title }}</td>
+        <td>{{ property.price }}</td>
+        <td>{{ property.location }}</td>
+        <td>{{ property.status }}</td>
+        <td>
+          <a
+            href="{% url 'edit-property' property.id %}"
+            class="btn btn-sm btn-warning"
+            >Edit</a
+          >
+          <a
+            href="{% url 'delete-property' property.id %}"
+            class="btn btn-sm btn-danger"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {%endblock%}

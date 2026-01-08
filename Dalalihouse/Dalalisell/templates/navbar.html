@@ -45,15 +45,6 @@
           >
         </li>
       </ul>
-      <a class="btn btn-secondary position-relative" style="margin-right: 12px">
-        <img
-          src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'default-avatar.png' %}{% endif %}"
-          alt="{{ user.username }}"
-          width="32"
-          height="32"
-          class="rounded-circle me-2"
-        />
-      </a>
       <form class="d-flex" role="search">
         <input
           class="form-control me-2"

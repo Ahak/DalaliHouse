@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
@@ -98,7 +99,23 @@ class AddPropertyView(LoginRequiredMixin, View):
         image3 = request.FILES.get('image3')
         image4 = request.FILES.get('image4')
         user = request.user
-        return redirect('seller-dashboard')
+
+        property = Property.objects.create(
+            title=title,
+            description=description,
+            price=price,
+            location=location,
+            room=room,
+            bathroom=bathroom,
+            image1=image1,
+            image2=image2,
+            image3=image3,
+            image4=image4,
+            seller=user
+        )
+        property.save()
+        messages.success(request, 'Property added successfully and is pending approval.')
+        return redirect('add-property')
     
 class PaymentView(LoginRequiredMixin,View):
     def get(self, request, pk=None, **kwargs):
@@ -127,3 +144,52 @@ class PaymentView(LoginRequiredMixin,View):
 
         messages.success(request, 'Payment successful and property marked as sold.')
         return redirect('buyer-dashboard')
+    
+class ViewPropertyView(LoginRequiredMixin, View):
+    def get(self, request):
+        property = Property.objects.filter(seller=request.user).filter(Q(status="Approved")|Q(status="Pending"))
+        return render(request, 'add_property.html', {'property': property })
+    
+class EditPropertyView(LoginRequiredMixin, View):
+    def get(self, request, pk=None, **kwargs):
+        if pk is None:
+            pk = kwargs.get('pk')
+        property = Property.objects.get(id=pk)
+        return render(request, 'edit_property.html', {'property': property })
+    
+    def post(self, request, pk=None, **kwargs):
+        if pk is None:
+            pk = kwargs.get('pk')
+        property = Property.objects.get(id=pk)
+
+        property.title = request.POST['title']
+        property.description = request.POST['description']
+        property.price = request.POST['price']
+        property.location = request.POST['location']
+        property.room = request.POST['room']
+        property.bathroom = request.POST['bathroom']
+
+        if 'image1' in request.FILES:
+            property.image1 = request.FILES['image1']
+        if 'image2' in request.FILES:
+            property.image2 = request.FILES['image2']
+        if 'image3' in request.FILES:
+            property.image3 = request.FILES['image3']
+        if 'image4' in request.FILES:
+            property.image4 = request.FILES['image4']
+
+        property.status = 'Pending'  # Reset status to pending on edit
+        property.save()
+
+        messages.success(request, 'Property updated successfully and is pending approval.')
+        return redirect('viewproperty')
+    
+class DeletePropertyView(LoginRequiredMixin, View):
+    def post(self, request, pk=None, **kwargs):
+        if pk is None:
+            pk = kwargs.get('pk')
+        property = Property.objects.get(id=pk)
+        property.delete()
+
+        messages.success(request, 'Property deleted successfully.')
+        return redirect('viewproperty')
