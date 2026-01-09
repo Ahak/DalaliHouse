@@ -152,10 +152,8 @@ class ViewPropertyView(LoginRequiredMixin, View):
     
 class EditPropertyView(LoginRequiredMixin, View):
     def get(self, request, pk=None, **kwargs):
-        if pk is None:
-            pk = kwargs.get('pk')
-        property = Property.objects.get(id=pk)
-        return render(request, 'edit_property.html', {'property': property })
+        # Since edit is now in modal, redirect back to property list
+        return redirect('viewproperty')
     
     def post(self, request, pk=None, **kwargs):
         if pk is None:
@@ -178,7 +176,7 @@ class EditPropertyView(LoginRequiredMixin, View):
         if 'image4' in request.FILES:
             property.image4 = request.FILES['image4']
 
-        property.status = 'Pending'  # Reset status to pending on edit
+        property.status = 'Pending'  
         property.save()
 
         messages.success(request, 'Property updated successfully and is pending approval.')
@@ -193,3 +191,4 @@ class DeletePropertyView(LoginRequiredMixin, View):
 
         messages.success(request, 'Property deleted successfully.')
         return redirect('viewproperty')
+    
