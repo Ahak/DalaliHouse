@@ -152,7 +152,6 @@ class ViewPropertyView(LoginRequiredMixin, View):
     
 class EditPropertyView(LoginRequiredMixin, View):
     def get(self, request, pk=None, **kwargs):
-        # Since edit is now in modal, redirect back to property list
         return redirect('viewproperty')
     
     def post(self, request, pk=None, **kwargs):
@@ -192,3 +191,12 @@ class DeletePropertyView(LoginRequiredMixin, View):
         messages.success(request, 'Property deleted successfully.')
         return redirect('viewproperty')
     
+class ViewPaymentsView(LoginRequiredMixin, View):
+    def get(self, request):
+        payments = Payment.objects.filter(buyer=request.user)
+        return render(request, 'my_payments.html', {'payments': payments })
+    
+class SellerPaymentsView(LoginRequiredMixin, View):
+    def get(self, request):
+        payments = Payment.objects.filter(property__seller=request.user)
+        return render(request, 'view-payment.html', {'payments': payments })

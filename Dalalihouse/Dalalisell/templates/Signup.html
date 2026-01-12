@@ -16,7 +16,9 @@
           <h2 class="text-center mb-4">Sign Up</h2>
           <form method="POST" action="{% url 'signup' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-2">
+            <div class="col-md-12">
+            <div class="mb-2 row">
+              
               <label for="first_name" class="form-label">First name</label>
               <input
                 type="text"
@@ -56,6 +58,9 @@
                 required
               />
             </div>
+          
+           
+
             <div class="mb-3">
               <label for="username" class="form-label">Role</label>
               <select class="form-control"
@@ -107,6 +112,7 @@
                 required
               />
             </div>
+          </div>
             <button type="submit" class="btn btn-primary w-100">Sign Up</button>
           </form>
           <div class="text-center mt-3">

@@ -57,7 +57,7 @@
             src="{{propert.image2.url}}"
             class="d-block w-100"
             alt="..."
-            style="height: 100%; object-fit: cover"
+            style="height: 350px; object-fit: cover"
           />
         </div>
         <div class="carousel-item">
@@ -115,12 +115,17 @@
         <strong>Bathrooms:</strong> {{propert.bathroom}}
       </li>
       <li class="list-group-item">
-        <strong>Seller:</strong> {{propert.seller.first_name}} {{propert.seller.last_name}}  
+        <strong>Seller:</strong> {{propert.seller.first_name}}
+        {{propert.seller.last_name}}
       </li>
       <li class="list-group-item">
         <strong>Contact:</strong> {{propert.seller.phone}}
+      </li>
     </ul>
-    <a class="btn btn-primary mt-3" href="{% url 'payment' pk=propert.id %}" >Buy Now</a>
+
+    <a class="btn btn-primary mt-3" href="{% url 'payment' pk=propert.id %}"
+      >Buy Now</a
+    >
   </div>
   {% endblock %}
 </div>
