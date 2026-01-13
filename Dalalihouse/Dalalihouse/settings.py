@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rww2&=e7a=%8xo!f_f(f#g87ld&)u@e+4immu*nj0!!!l@lvfn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -81,8 +81,7 @@ WSGI_APPLICATION = 'Dalalihouse.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default='sqlite:///db.sqlite3',
-        conn_max_age=600,
-        ssl_require=True
+        conn_max_age=600
     )
 }
 
@@ -128,3 +127,5 @@ STATICFILE_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL ='media/'
 MEDIA_ROOT =os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = '/'

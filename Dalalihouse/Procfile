@@ -1,1 +1,1 @@
-web: gunicorn Dalalisell.wsgi
+web: gunicorn Dalalihouse.wsgi
