@@ -24,8 +24,8 @@ class Property(models.Model):
         ('Sold', 'Sold'),
     ]
     title =models.CharField(max_length=50)
-    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role':'seller'} )
-    price = models.DecimalField(decimal_places=2, max_digits=100, default=0)
+    seller = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    price = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     room = models.IntegerField()
     bathroom =models.IntegerField()
     location =models.CharField(max_length=50)
@@ -42,8 +42,8 @@ class Property(models.Model):
     
 class Payment(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role':'buyer'})
-    amount = models.DecimalField(decimal_places=2, max_digits=100)
+    buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     date = models.DateTimeField(default=datetime.datetime.today)
 
     def __str__(self):

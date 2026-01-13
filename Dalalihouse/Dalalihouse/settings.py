@@ -21,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rww2&=e7a=%8xo!f_f(f#g87ld&)u@e+4immu*nj0!!!l@lvfn'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-rww2&=e7a=%8xo!f_f(f#g87ld&)u@e+4immu*nj0!!!l@lvfn')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1]').split(',')
+
 
 
 # Application definition
@@ -129,3 +130,19 @@ MEDIA_URL ='media/'
 MEDIA_ROOT =os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
