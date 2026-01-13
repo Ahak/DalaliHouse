@@ -55,11 +55,15 @@
                 required
               />
             </div>
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
           </form>
           <div class="text-center mt-3">
             <div class="message">{{ message }}</div>
-            <a href="{% url 'signup' %}" style="text-decoration: none; font-size: 19px;">Sign up</a>
+            <a
+              href="{% url 'signup' %}"
+              style="text-decoration: none; font-size: 19px"
+              >Sign up</a
+            >
           </div>
           {% if messages %}
           <div class="mt-3">
